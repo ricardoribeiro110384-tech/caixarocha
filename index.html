@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Controle de Caixa</title>
+  <style>
+    :root{
+      --bg:#f4f6f8;
+      --card:#ffffff;
+      --primary:#ff6a00;
+      --primary-dark:#d95800;
+      --text:#1f2937;
+      --muted:#6b7280;
+      --border:#e5e7eb;
+      --success:#16a34a;
+      --danger:#dc2626;
+      --shadow:0 10px 30px rgba(0,0,0,.08);
+      --radius:18px;
+    }
+
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:Arial, Helvetica, sans-serif;
+      background:var(--bg);
+      color:var(--text);
+    }
+
+    .hidden{display:none}
+    .app{min-height:100vh}
+
+    .login-screen{
+      min-height:100vh;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      padding:20px;
+      background:linear-gradient(135deg,#fff7f0,#f4f6f8);
+    }
+
+    .login-card{
+      width:100%;
+      max-width:420px;
+      background:var(--card);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      padding:32px;
+    }
+
+    .brand{
+      text-align:center;
+      margin-bottom:24px;
+    }
+
+    .brand h1{
+      margin:0;
+      color:var(--primary);
+      font-size:30px;
+    }
+
+    .brand p{
+      margin:8px 0 0;
+      color:var(--muted);
+      font-size:14px;
+    }
+
+    .field{
+      margin-bottom:16px;
+    }
+
+    .field label{
+      display:block;
+      font-size:14px;
+      margin-bottom:6px;
+      font-weight:bold;
+    }
+
+    .field input, .field select, .field textarea{
+      width:100%;
+      padding:13px 14px;
+      border:1px solid var(--border);
+      border-radius:12px;
+      font-size:14px;
+      outline:none;
+      background:#fff;
+    }
+
+    .field textarea{
+      min-height:90px;
+      resize:vertical;
+    }
+
+    .btn{
+      border:none;
+      padding:13px 18px;
+      border-radius:12px;
+      font-weight:bold;
+      cursor:pointer;
+      transition:.2s;
+    }
+
+    .btn-primary{
+      background:var(--primary);
+      color:#fff;
+    }
+
+    .btn-primary:hover{
+      background:var(--primary-dark);
+    }
+
+    .btn-danger{
+      background:var(--danger);
+      color:#fff;
+    }
+
+    .btn-secondary{
+      background:#111827;
+      color:#fff;
+    }
+
+    .topbar{
+      background:#111827;
+      color:#fff;
+      padding:16px 20px;
+      display:flex;
+      justify-content:space-between;
+      align-items:center;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
+    .topbar .user-box{
+      font-size:14px;
+    }
+
+    .layout{
+      display:grid;
+      grid-template-columns:260px 1fr;
+      min-height:calc(100vh - 72px);
+    }
+
+    .sidebar{
+      background:#fff;
+      border-right:1px solid var(--border);
+      padding:20px;
+    }
+
+    .menu-btn{
+      width:100%;
+      text-align:left;
+      padding:14px 16px;
+      border:none;
+      margin-bottom:10px;
+      border-radius:12px;
+      background:#f3f4f6;
+      cursor:pointer;
+      font-weight:bold;
+    }
+
+    .menu-btn.active{
+      background:var(--primary);
+      color:#fff;
+    }
+
+    .content{
+      padding:20px;
+    }
+
+    .grid{
+      display:grid;
+      gap:16px;
+    }
+
+    .grid-4{
+      grid-template-columns:repeat(4,1fr);
+    }
+
+    .grid-2{
+      grid-template-columns:repeat(2,1fr);
+    }
+
+    .card{
+      background:var(--card);
+      border-radius:var(--radius);
+      box-shadow:var(--shadow);
+      padding:20px;
+    }
+
+    .card h3{
+      margin-top:0;
+      font-size:18px;
+    }
+
+    .kpi{
+      font-size:28px;
+      font-weight:bold;
+      margin-top:10px;
+      color:var(--primary);
+    }
+
+    .muted{
+      color:var(--muted);
+      font-size:13px;
+    }
+
+    table{
+      width:100%;
+      border-collapse:collapse;
+      margin-top:10px;
+      font-size:14px;
+    }
+
+    th, td{
+      padding:10px;
+      border-bottom:1px solid var(--border);
+      text-align:left;
+    }
+
+    th{
+      background:#f9fafb;
+    }
+
+    .actions{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+
+    .section{
+      display:none;
+    }
+
+    .section.active{
+      display:block;
+    }
+
+    .message{
+      margin-top:12px;
+      padding:12px;
+      border-radius:12px;
+      font-size:14px;
+    }
+
+    .success{
+      background:#ecfdf5;
+      color:#166534;
+    }
+
+    .error{
+      background:#fef2f2;
+      color:#991b1b;
+    }
+
+    @media (max-width: 980px){
+      .layout{
+        grid-template-columns:1fr;
+      }
+      .sidebar{
+        border-right:none;
+        border-bottom:1px solid var(--border);
+      }
+      .grid-4,.grid-2{
+        grid-template-columns:1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <!-- LOGIN -->
+    <section id="loginScreen" class="login-screen">
+      <div class="login-card">
+        <div class="brand">
+          <h1>Controle de Caixa</h1>
+          <p></p>
+        </div>
+
+        <div class="field">
+          <label>Usuário</label>
+          <input type="text" id="loginUsuario" placeholder="Digite seu usuário">
+        </div>
+
+        <div class="field">
+          <label>Senha</label>
+          <input type="password" id="loginSenha" placeholder="Digite sua senha">
+        </div>
+
+        <button class="btn btn-primary" style="width:100%" onclick="fazerLogin()">Entrar</button>
+        <div id="loginMsg"></div>
+      </div>
+    </section>
+
+    <!-- SISTEMA -->
+    <section id="systemScreen" class="hidden">
+      <div class="topbar">
+        <div>
+          <strong>Controle de Caixa</strong>
+        </div>
+        <div class="user-box">
+          <span id="userInfo"></span>
+          <button class="btn btn-danger" onclick="logout()">Sair</button>
+        </div>
+      </div>
+
+      <div class="layout">
+        <aside class="sidebar">
+          <button class="menu-btn active" onclick="openSection('dashboard', this)">Dashboard</button>
+          <button class="menu-btn" onclick="openSection('vendas', this)">Nova Venda</button>
+          <button class="menu-btn" onclick="openSection('relatorios', this)">Relatórios</button>
+        </aside>
+
+        <main class="content">
+          <!-- DASHBOARD -->
+          <section id="dashboard" class="section active">
+            <div class="card">
+              <h3>Filtro do Dashboard</h3>
+              <div class="grid grid-2">
+                <div class="field">
+                  <label>Selecione a data</label>
+                  <input type="date" id="dashboardData">
+                </div>
+                <div class="field" style="display:flex;align-items:end">
+                  <button class="btn btn-primary" onclick="carregarDashboard()">Atualizar Dashboard</button>
+                </div>
+              </div>
+            </div>
+
+            <div class="grid grid-4" style="margin-top:16px">
+              <div class="card">
+                <div class="muted">Total vendido</div>
+                <div class="kpi" id="kpiTotal">R$ 0,00</div>
+              </div>
+              <div class="card">
+                <div class="muted">Dinheiro</div>
+                <div class="kpi" id="kpiDinheiro">R$ 0,00</div>
+              </div>
+              <div class="card">
+                <div class="muted">PIX</div>
+                <div class="kpi" id="kpiPix">R$ 0,00</div>
+              </div>
+              <div class="card">
+                <div class="muted">Cartão</div>
+                <div class="kpi" id="kpiCartao">R$ 0,00</div>
+              </div>
+            </div>
+
+            <div class="grid grid-2" style="margin-top:16px">
+              <div class="card">
+                <h3>Vendas por vendedor</h3>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Vendedor</th>
+                      <th>Total</th>
+                    </tr>
+                  </thead>
+                  <tbody id="rankingVendedores"></tbody>
+                </table>
+              </div>
+
+              <div class="card">
+                <h3>Vendas do dia</h3>
+                <div class="muted" id="qtdVendas">0 vendas</div>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Hora</th>
+                      <th>Vendedor</th>
+                      <th>Forma</th>
+                      <th>Valor</th>
+                    </tr>
+                  </thead>
+                  <tbody id="ultimasVendas"></tbody>
+                </table>
+              </div>
+            </div>
+          </section>
+
+          <!-- VENDAS -->
+          <section id="vendas" class="section">
+            <div class="card">
+              <h3>Lançar nova venda</h3>
+              <div class="grid grid-2">
+                <div class="field">
+                  <label>Data da venda</label>
+                  <input type="date" id="vendaData">
+                </div>
+
+                <div class="field">
+                  <label>Vendedor</label>
+                  <input type="text" id="vendaVendedor" placeholder="Nome do vendedor">
+                </div>
+
+                <div class="field">
+                  <label>Forma de pagamento</label>
+                  <select id="vendaForma">
+                    <option value="">Selecione</option>
+                    <option value="DINHEIRO">Dinheiro</option>
+                    <option value="PIX">PIX</option>
+                    <option value="CARTAO">Cartão</option>
+                  </select>
+                </div>
+
+                <div class="field">
+                  <label>Valor</label>
+                  <input type="number" step="0.01" id="vendaValor" placeholder="0,00">
+                </div>
+              </div>
+
+              <div class="field">
+                <label>Observação</label>
+                <textarea id="vendaObs" placeholder="Observação opcional"></textarea>
+              </div>
+
+              <div class="actions">
+                <button class="btn btn-primary" onclick="salvarVenda()">Salvar venda</button>
+              </div>
+
+              <div id="vendaMsg"></div>
+            </div>
+          </section>
+
+          <!-- RELATÓRIOS -->
+          <section id="relatorios" class="section">
+            <div class="card">
+              <h3>Filtros do relatório</h3>
+              <div class="grid grid-2">
+                <div class="field">
+                  <label>Data inicial</label>
+                  <input type="date" id="relDataInicial">
+                </div>
+
+                <div class="field">
+                  <label>Data final</label>
+                  <input type="date" id="relDataFinal">
+                </div>
+
+                <div class="field">
+                  <label>Vendedor</label>
+                  <input type="text" id="relVendedor" placeholder="Filtrar por vendedor">
+                </div>
+
+                <div class="field">
+                  <label>Forma de pagamento</label>
+                  <select id="relForma">
+                    <option value="">Todas</option>
+                    <option value="DINHEIRO">Dinheiro</option>
+                    <option value="PIX">PIX</option>
+                    <option value="CARTAO">Cartão</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="actions">
+                <button class="btn btn-primary" onclick="buscarRelatorio()">Buscar relatório</button>
+                <button class="btn btn-secondary" onclick="exportarTXT()">Exportar TXT</button>
+              </div>
+            </div>
+
+            <div class="card" style="margin-top:16px">
+              <h3>Relatório detalhado</h3>
+              <table>
+                <thead>
+                  <tr>
+                    <th>Data</th>
+                    <th>Hora</th>
+                    <th>Vendedor</th>
+                    <th>Forma</th>
+                    <th>Valor</th>
+                    <th>Usuário</th>
+                    <th>Ações</th>
+                  </tr>
+                </thead>
+                <tbody id="relatorioBody"></tbody>
+              </table>
+            </div>
+          </section>
+        </main>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    let usuarioLogado = null;
+    let relatorioAtual = [];
+
+    function hojeISO(){
+      const d = new Date();
+      const y = d.getFullYear();
+      const m = String(d.getMonth()+1).padStart(2,'0');
+      const day = String(d.getDate()).padStart(2,'0');
+      return `${y}-${m}-${day}`;
+    }
+
+    function money(v){
+      return Number(v || 0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
+    }
+
+    function setMessage(el, text, type){
+      el.innerHTML = `<div class="message ${type}">${text}</div>`;
+    }
+
+    function fazerLogin(){
+      const usuario = document.getElementById('loginUsuario').value.trim();
+      const senha = document.getElementById('loginSenha').value.trim();
+      const msg = document.getElementById('loginMsg');
+
+      if(!usuario || !senha){
+        setMessage(msg,'Informe usuário e senha.','error');
+        return;
+      }
+
+      google.script.run.withSuccessHandler(res => {
+        if(!res.ok){
+          setMessage(msg, res.message, 'error');
+          return;
+        }
+
+        usuarioLogado = res.user;
+        document.getElementById('loginScreen').classList.add('hidden');
+        document.getElementById('systemScreen').classList.remove('hidden');
+        document.getElementById('userInfo').innerText =
+          `${usuarioLogado.nome} | Perfil: ${usuarioLogado.perfil} | Permissão apagar: ${usuarioLogado.podeApagar ? 'SIM' : 'NÃO'}`;
+
+        document.getElementById('dashboardData').value = hojeISO();
+        document.getElementById('vendaData').value = hojeISO();
+        document.getElementById('relDataInicial').value = hojeISO();
+        document.getElementById('relDataFinal').value = hojeISO();
+
+        carregarDashboard();
+      }).login(usuario, senha);
+    }
+
+    function logout(){
+      usuarioLogado = null;
+      location.reload();
+    }
+
+    function openSection(id, btn){
+      document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+
+      document.querySelectorAll('.menu-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+    }
+
+    function carregarDashboard(){
+      const data = document.getElementById('dashboardData').value;
+      google.script.run.withSuccessHandler(res => {
+        if(!res.ok) return;
+
+        document.getElementById('kpiTotal').innerText = money(res.resumo.total);
+        document.getElementById('kpiDinheiro').innerText = money(res.resumo.dinheiro);
+        document.getElementById('kpiPix').innerText = money(res.resumo.pix);
+        document.getElementById('kpiCartao').innerText = money(res.resumo.cartao);
+        document.getElementById('qtdVendas').innerText = `${res.resumo.quantidade} vendas`;
+
+        const ranking = document.getElementById('rankingVendedores');
+        ranking.innerHTML = '';
+        if(res.ranking.length === 0){
+          ranking.innerHTML = `<tr><td colspan="2">Nenhuma venda na data selecionada.</td></tr>`;
+        } else {
+          res.ranking.forEach(r => {
+            ranking.innerHTML += `
+              <tr>
+                <td>${r.vendedor}</td>
+                <td>${money(r.total)}</td>
+              </tr>
+            `;
+          });
+        }
+
+        const vendas = document.getElementById('ultimasVendas');
+        vendas.innerHTML = '';
+        if(res.vendas.length === 0){
+          vendas.innerHTML = `<tr><td colspan="4">Nenhuma venda na data selecionada.</td></tr>`;
+        } else {
+          res.vendas.forEach(v => {
+            vendas.innerHTML += `
+              <tr>
+                <td>${v.hora}</td>
+                <td>${v.vendedor}</td>
+                <td>${v.formaPagamento}</td>
+                <td>${money(v.valor)}</td>
+              </tr>
+            `;
+          });
+        }
+      }).getDashboardData(data);
+    }
+
+    function salvarVenda(){
+      const venda = {
+        data: document.getElementById('vendaData').value,
+        vendedor: document.getElementById('vendaVendedor').value.trim(),
+        formaPagamento: document.getElementById('vendaForma').value,
+        valor: document.getElementById('vendaValor').value,
+        observacao: document.getElementById('vendaObs').value.trim()
+      };
+
+      const msg = document.getElementById('vendaMsg');
+
+      google.script.run.withSuccessHandler(res => {
+        if(!res.ok){
+          setMessage(msg, res.message, 'error');
+          return;
+        }
+
+        setMessage(msg, res.message, 'success');
+
+        document.getElementById('vendaVendedor').value = '';
+        document.getElementById('vendaForma').value = '';
+        document.getElementById('vendaValor').value = '';
+        document.getElementById('vendaObs').value = '';
+
+        carregarDashboard();
+      }).registrarVenda(venda, usuarioLogado);
+    }
+
+    function buscarRelatorio(){
+      const filtros = {
+        dataInicial: document.getElementById('relDataInicial').value,
+        dataFinal: document.getElementById('relDataFinal').value,
+        vendedor: document.getElementById('relVendedor').value.trim(),
+        formaPagamento: document.getElementById('relForma').value
+      };
+
+      google.script.run.withSuccessHandler(res => {
+        if(!res.ok) return;
+
+        relatorioAtual = res.vendas;
+        const tbody = document.getElementById('relatorioBody');
+        tbody.innerHTML = '';
+
+        if(res.vendas.length === 0){
+          tbody.innerHTML = `<tr><td colspan="7">Nenhum resultado encontrado.</td></tr>`;
+          return;
+        }
+
+        res.vendas.forEach(v => {
+          tbody.innerHTML += `
+            <tr>
+              <td>${v.data}</td>
+              <td>${v.hora}</td>
+              <td>${v.vendedor}</td>
+              <td>${v.formaPagamento}</td>
+              <td>${money(v.valor)}</td>
+              <td>${v.usuarioLancamento}</td>
+              <td>
+                ${usuarioLogado && usuarioLogado.podeApagar
+                  ? `<button class="btn btn-danger" onclick="excluirVenda('${v.id}')">Apagar</button>`
+                  : `<span class="muted">Sem permissão</span>`
+                }
+              </td>
+            </tr>
+          `;
+        });
+      }).listarRelatorio(filtros);
+    }
+
+    function excluirVenda(id){
+      if(!confirm('Deseja realmente apagar esta venda?')) return;
+
+      google.script.run.withSuccessHandler(res => {
+        alert(res.message);
+        if(res.ok){
+          buscarRelatorio();
+          carregarDashboard();
+        }
+      }).apagarVenda(id, usuarioLogado);
+    }
+
+    function exportarTXT(){
+      if(!relatorioAtual || relatorioAtual.length === 0){
+        alert('Nenhum relatório carregado para exportar.');
+        return;
+      }
+
+      let texto = 'RELATÓRIO DE VENDAS\n';
+      texto += '========================================\n\n';
+
+      relatorioAtual.forEach(v => {
+        texto += `Data: ${v.data}\n`;
+        texto += `Hora: ${v.hora}\n`;
+        texto += `Vendedor: ${v.vendedor}\n`;
+        texto += `Forma de pagamento: ${v.formaPagamento}\n`;
+        texto += `Valor: ${money(v.valor)}\n`;
+        texto += `Usuário lançamento: ${v.usuarioLancamento}\n`;
+        texto += `Observação: ${v.observacao || '-'}\n`;
+        texto += '----------------------------------------\n';
+      });
+
+      const blob = new Blob([texto], { type: 'text/plain;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'relatorio_vendas.txt';
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    window.onload = function(){
+      document.getElementById('dashboardData').value = hojeISO();
+      document.getElementById('vendaData').value = hojeISO();
+      document.getElementById('relDataInicial').value = hojeISO();
+      document.getElementById('relDataFinal').value = hojeISO();
+    };
+  </script>
+</body>
+</html>
