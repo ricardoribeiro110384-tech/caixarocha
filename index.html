@@ -1,251 +1,68 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Controle de Caixa</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Controle de Caixa V2</title>
   <style>
     :root{
-      --bg:#f3f4f6;
-      --card:#ffffff;
-      --line:#e5e7eb;
-      --text:#111827;
-      --muted:#6b7280;
-      --orange:#ff6a00;
-      --orange-dark:#e25d00;
-      --danger:#dc2626;
-      --ok:#16a34a;
-      --radius:18px;
-      --shadow:0 10px 30px rgba(0,0,0,.08);
+      --bg:#f3f4f6; --card:#fff; --line:#e5e7eb; --text:#111827; --muted:#6b7280;
+      --orange:#ff6a00; --orange2:#e45f00; --danger:#dc2626; --ok:#16a34a;
+      --radius:18px; --shadow:0 10px 30px rgba(0,0,0,.08);
     }
-
     *{box-sizing:border-box}
-
-    body{
-      margin:0;
-      font-family:Arial, Helvetica, sans-serif;
-      background:var(--bg);
-      color:var(--text);
-    }
-
+    body{margin:0;font-family:Arial,Helvetica,sans-serif;background:var(--bg);color:var(--text)}
     .hidden{display:none}
-
-    .login-wrap{
-      min-height:100vh;
-      display:flex;
-      align-items:center;
-      justify-content:center;
-      padding:20px;
-      background:linear-gradient(135deg,#fff7f0,#f5f7fa);
-    }
-
-    .login-card,.card{
-      background:var(--card);
-      border-radius:var(--radius);
-      box-shadow:var(--shadow);
-    }
-
-    .login-card{
-      width:100%;
-      max-width:420px;
-      padding:28px;
-    }
-
-    h1,h2,h3{margin:0 0 12px}
-
-    .muted{
-      color:var(--muted);
-      font-size:14px;
-    }
-
+    .wrap{min-height:100vh;display:flex;align-items:center;justify-content:center;padding:20px;background:linear-gradient(135deg,#fff7f0,#f5f7fa)}
+    .card,.login-card{background:#fff;border-radius:var(--radius);box-shadow:var(--shadow)}
+    .login-card{width:100%;max-width:430px;padding:28px}
+    .topbar{background:#111827;color:#fff;padding:14px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+    .layout{display:grid;grid-template-columns:260px 1fr;min-height:calc(100vh - 60px)}
+    .sidebar{background:#fff;border-right:1px solid var(--line);padding:18px}
+    .content{padding:18px}
+    .card{padding:18px}
     .field{margin-bottom:14px}
-
-    .field label{
-      display:block;
-      margin-bottom:6px;
-      font-weight:bold;
-      font-size:14px;
-    }
-
-    input,select,textarea{
-      width:100%;
-      padding:12px 14px;
-      border:1px solid var(--line);
-      border-radius:12px;
-      font-size:14px;
-      background:#fff;
-    }
-
-    textarea{
-      min-height:90px;
-      resize:vertical;
-    }
-
-    .btn{
-      border:none;
-      padding:12px 16px;
-      border-radius:12px;
-      cursor:pointer;
-      font-weight:bold;
-    }
-
-    .btn-primary{
-      background:var(--orange);
-      color:#fff;
-    }
-
-    .btn-primary:hover{
-      background:var(--orange-dark);
-    }
-
-    .btn-danger{
-      background:var(--danger);
-      color:#fff;
-    }
-
-    .btn-dark{
-      background:#111827;
-      color:#fff;
-    }
-
-    .topbar{
-      background:#111827;
-      color:#fff;
-      padding:14px 18px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap:12px;
-      flex-wrap:wrap;
-    }
-
-    .layout{
-      display:grid;
-      grid-template-columns:260px 1fr;
-      min-height:calc(100vh - 62px);
-    }
-
-    .sidebar{
-      background:#fff;
-      border-right:1px solid var(--line);
-      padding:18px;
-    }
-
-    .menu-btn{
-      width:100%;
-      text-align:left;
-      border:none;
-      background:#f3f4f6;
-      margin-bottom:10px;
-      padding:14px 16px;
-      border-radius:12px;
-      cursor:pointer;
-      font-weight:bold;
-    }
-
-    .menu-btn.active{
-      background:var(--orange);
-      color:#fff;
-    }
-
-    .content{
-      padding:18px;
-    }
-
-    .card{
-      padding:18px;
-    }
-
-    .grid{
-      display:grid;
-      gap:16px;
-    }
-
-    .grid-2{
-      grid-template-columns:repeat(2,1fr);
-    }
-
-    .grid-4{
-      grid-template-columns:repeat(4,1fr);
-    }
-
-    .kpi{
-      font-size:28px;
-      font-weight:bold;
-      color:var(--orange);
-    }
-
-    table{
-      width:100%;
-      border-collapse:collapse;
-      margin-top:10px;
-      font-size:14px;
-    }
-
-    th,td{
-      padding:10px;
-      border-bottom:1px solid var(--line);
-      text-align:left;
-    }
-
-    th{
-      background:#f9fafb;
-    }
-
+    .field label{display:block;margin-bottom:6px;font-weight:bold;font-size:14px}
+    input,select,textarea{width:100%;padding:12px 14px;border:1px solid var(--line);border-radius:12px;font-size:14px;background:#fff}
+    textarea{min-height:90px;resize:vertical}
+    .btn{border:none;padding:12px 16px;border-radius:12px;cursor:pointer;font-weight:bold}
+    .btn-primary{background:var(--orange);color:#fff}
+    .btn-primary:hover{background:var(--orange2)}
+    .btn-dark{background:#111827;color:#fff}
+    .btn-danger{background:var(--danger);color:#fff}
+    .menu-btn{width:100%;text-align:left;border:none;background:#f3f4f6;margin-bottom:10px;padding:14px 16px;border-radius:12px;cursor:pointer;font-weight:bold}
+    .menu-btn.active{background:var(--orange);color:#fff}
+    .grid{display:grid;gap:16px}
+    .grid-2{grid-template-columns:repeat(2,1fr)}
+    .grid-4{grid-template-columns:repeat(4,1fr)}
+    .kpi{font-size:28px;font-weight:bold;color:var(--orange)}
+    .muted{color:var(--muted)}
+    table{width:100%;border-collapse:collapse;margin-top:10px;font-size:14px}
+    th,td{padding:10px;border-bottom:1px solid var(--line);text-align:left}
+    th{background:#f9fafb}
     .section{display:none}
     .section.active{display:block}
-
-    .msg{
-      margin-top:12px;
-      padding:12px;
-      border-radius:12px;
-      font-size:14px;
-    }
-
-    .msg-ok{
-      background:#ecfdf5;
-      color:#166534;
-    }
-
-    .msg-err{
-      background:#fef2f2;
-      color:#991b1b;
-    }
-
-    .actions{
-      display:flex;
-      gap:8px;
-      flex-wrap:wrap;
-    }
-
-    @media (max-width:980px){
-      .layout{
-        grid-template-columns:1fr;
-      }
-      .sidebar{
-        border-right:none;
-        border-bottom:1px solid var(--line);
-      }
-      .grid-2,.grid-4{
-        grid-template-columns:1fr;
-      }
-    }
+    .msg{margin-top:12px;padding:12px;border-radius:12px;font-size:14px}
+    .msg-ok{background:#ecfdf5;color:#166534}
+    .msg-err{background:#fef2f2;color:#991b1b}
+    .actions{display:flex;gap:8px;flex-wrap:wrap}
+    @media (max-width:980px){.layout{grid-template-columns:1fr}.sidebar{border-right:none;border-bottom:1px solid var(--line)}.grid-2,.grid-4{grid-template-columns:1fr}}
   </style>
 </head>
 <body>
-  <section id="loginView" class="login-wrap">
+  <section id="loginView" class="wrap">
     <div class="login-card">
-      <h2>Controle de Caixa</h2>
-      <p class="muted">Sistema conectado ao Google Sheets</p>
+      <h2>Controle de Caixa V2</h2>
+      <p class="muted">Sistema profissional com Google Sheets</p>
 
       <div class="field">
         <label>Usuário</label>
-        <input id="loginUsuario" type="text" placeholder="Digite o usuário">
+        <input id="loginUsuario" type="text" value="admin">
       </div>
 
       <div class="field">
         <label>Senha</label>
-        <input id="loginSenha" type="password" placeholder="Digite a senha">
+        <input id="loginSenha" type="password" value="1234">
       </div>
 
       <div class="actions">
@@ -254,13 +71,12 @@
       </div>
 
       <div id="loginMsg"></div>
-      <p class="muted" style="margin-top:16px">Login padrão: admin / 1234</p>
     </div>
   </section>
 
   <section id="appView" class="hidden">
     <div class="topbar">
-      <div><strong>Controle de Caixa</strong></div>
+      <div><strong>Controle de Caixa V2</strong></div>
       <div>
         <span id="userInfo"></span>
         <button class="btn btn-danger" onclick="logout()">Sair</button>
@@ -270,14 +86,15 @@
     <div class="layout">
       <aside class="sidebar">
         <button class="menu-btn active" onclick="openSection('dashboard', this)">Dashboard</button>
-        <button class="menu-btn" onclick="openSection('novaVenda', this)">Nova venda</button>
+        <button class="menu-btn" onclick="openSection('caixa', this)">Caixa</button>
+        <button class="menu-btn" onclick="openSection('vendas', this)">Vendas</button>
+        <button class="menu-btn" onclick="openSection('movimentos', this)">Sangria / Suprimento</button>
         <button class="menu-btn" onclick="openSection('relatorios', this)">Relatórios</button>
       </aside>
 
       <main class="content">
         <section id="dashboard" class="section active">
           <div class="card">
-            <h3>Filtro do dashboard</h3>
             <div class="grid grid-2">
               <div class="field">
                 <label>Data</label>
@@ -287,6 +104,7 @@
                 <button class="btn btn-primary" onclick="carregarDashboard()">Atualizar dashboard</button>
               </div>
             </div>
+            <div id="statusCaixaBox" class="muted"></div>
           </div>
 
           <div class="grid grid-4" style="margin-top:16px">
@@ -296,13 +114,18 @@
             <div class="card"><div class="muted">Cartão</div><div class="kpi" id="kpiCartao">R$ 0,00</div></div>
           </div>
 
+          <div class="grid grid-4" style="margin-top:16px">
+            <div class="card"><div class="muted">Sangria</div><div class="kpi" id="kpiSangria">R$ 0,00</div></div>
+            <div class="card"><div class="muted">Suprimento</div><div class="kpi" id="kpiSuprimento">R$ 0,00</div></div>
+            <div class="card"><div class="muted">Saldo inicial</div><div class="kpi" id="kpiSaldoInicial">R$ 0,00</div></div>
+            <div class="card"><div class="muted">Dinheiro teórico</div><div class="kpi" id="kpiSaldoTeorico">R$ 0,00</div></div>
+          </div>
+
           <div class="grid grid-2" style="margin-top:16px">
             <div class="card">
               <h3>Vendas por vendedor</h3>
               <table>
-                <thead>
-                  <tr><th>Vendedor</th><th>Total</th></tr>
-                </thead>
+                <thead><tr><th>Vendedor</th><th>Total</th></tr></thead>
                 <tbody id="rankingBody"></tbody>
               </table>
             </div>
@@ -311,30 +134,65 @@
               <h3>Vendas do dia</h3>
               <div class="muted" id="qtdVendas">0 vendas</div>
               <table>
-                <thead>
-                  <tr><th>Hora</th><th>Vendedor</th><th>Forma</th><th>Valor</th></tr>
-                </thead>
+                <thead><tr><th>Hora</th><th>Vendedor</th><th>Forma</th><th>Valor</th></tr></thead>
                 <tbody id="vendasDiaBody"></tbody>
               </table>
             </div>
           </div>
         </section>
 
-        <section id="novaVenda" class="section">
+        <section id="caixa" class="section">
+          <div class="grid grid-2">
+            <div class="card">
+              <h3>Abertura de caixa</h3>
+              <div class="field">
+                <label>Data</label>
+                <input type="date" id="caixaDataAbertura">
+              </div>
+              <div class="field">
+                <label>Saldo inicial</label>
+                <input type="number" step="0.01" id="caixaSaldoInicial" placeholder="0,00">
+              </div>
+              <div class="field">
+                <label>Observação</label>
+                <textarea id="caixaObsAbertura"></textarea>
+              </div>
+              <button class="btn btn-primary" onclick="abrirCaixa()">Abrir caixa</button>
+              <div id="caixaMsgAbertura"></div>
+            </div>
+
+            <div class="card">
+              <h3>Fechamento de caixa</h3>
+              <div class="field">
+                <label>Data</label>
+                <input type="date" id="caixaDataFechamento">
+              </div>
+              <div class="field">
+                <label>Saldo final informado</label>
+                <input type="number" step="0.01" id="caixaSaldoFinal" placeholder="0,00">
+              </div>
+              <div class="field">
+                <label>Observação</label>
+                <textarea id="caixaObsFechamento"></textarea>
+              </div>
+              <button class="btn btn-danger" onclick="fecharCaixa()">Fechar caixa</button>
+              <div id="caixaMsgFechamento"></div>
+            </div>
+          </div>
+        </section>
+
+        <section id="vendas" class="section">
           <div class="card">
             <h3>Lançar venda</h3>
-
             <div class="grid grid-2">
               <div class="field">
                 <label>Data da venda</label>
                 <input type="date" id="vendaData">
               </div>
-
               <div class="field">
                 <label>Vendedor</label>
-                <input type="text" id="vendaVendedor" placeholder="Nome do vendedor">
+                <input type="text" id="vendaVendedor">
               </div>
-
               <div class="field">
                 <label>Forma de pagamento</label>
                 <select id="vendaForma">
@@ -344,20 +202,47 @@
                   <option value="CARTAO">Cartão</option>
                 </select>
               </div>
-
               <div class="field">
                 <label>Valor</label>
-                <input type="number" step="0.01" id="vendaValor" placeholder="0,00">
+                <input type="number" step="0.01" id="vendaValor">
               </div>
             </div>
-
             <div class="field">
               <label>Observação</label>
-              <textarea id="vendaObs" placeholder="Observação opcional"></textarea>
+              <textarea id="vendaObs"></textarea>
             </div>
-
             <button class="btn btn-primary" onclick="salvarVenda()">Salvar venda</button>
             <div id="vendaMsg"></div>
+          </div>
+        </section>
+
+        <section id="movimentos" class="section">
+          <div class="card">
+            <h3>Sangria e suprimento</h3>
+            <div class="grid grid-2">
+              <div class="field">
+                <label>Data</label>
+                <input type="date" id="movData">
+              </div>
+              <div class="field">
+                <label>Tipo</label>
+                <select id="movTipo">
+                  <option value="">Selecione</option>
+                  <option value="SANGRIA">Sangria</option>
+                  <option value="SUPRIMENTO">Suprimento</option>
+                </select>
+              </div>
+              <div class="field">
+                <label>Valor</label>
+                <input type="number" step="0.01" id="movValor">
+              </div>
+            </div>
+            <div class="field">
+              <label>Observação</label>
+              <textarea id="movObs"></textarea>
+            </div>
+            <button class="btn btn-primary" onclick="salvarMovimento()">Salvar movimento</button>
+            <div id="movMsg"></div>
           </div>
         </section>
 
@@ -369,19 +254,16 @@
                 <label>Data inicial</label>
                 <input type="date" id="relDataInicial">
               </div>
-
               <div class="field">
                 <label>Data final</label>
                 <input type="date" id="relDataFinal">
               </div>
-
               <div class="field">
                 <label>Vendedor</label>
-                <input type="text" id="relVendedor" placeholder="Filtrar por vendedor">
+                <input type="text" id="relVendedor">
               </div>
-
               <div class="field">
-                <label>Forma de pagamento</label>
+                <label>Forma</label>
                 <select id="relForma">
                   <option value="">Todas</option>
                   <option value="DINHEIRO">Dinheiro</option>
@@ -390,7 +272,6 @@
                 </select>
               </div>
             </div>
-
             <div class="actions">
               <button class="btn btn-primary" onclick="buscarRelatorio()">Buscar</button>
               <button class="btn btn-dark" onclick="exportarTXT()">Exportar TXT</button>
@@ -443,58 +324,44 @@
     }
 
     async function api(action, payload = {}) {
-      const body = {
-        action,
-        ...payload
-      };
-
       const response = await fetch(SCRIPT_URL, {
         method: "POST",
-        headers: {
-          "Content-Type": "text/plain;charset=utf-8"
-        },
-        body: JSON.stringify(body)
+        headers: { "Content-Type": "text/plain;charset=utf-8" },
+        body: JSON.stringify({ action, ...payload })
       });
-
       return await response.json();
     }
 
+    function preencherDatasPadrao() {
+      const hoje = hojeISO();
+      ['dashboardData','caixaDataAbertura','caixaDataFechamento','vendaData','movData','relDataInicial','relDataFinal']
+        .forEach(id => document.getElementById(id).value = hoje);
+    }
+
     async function instalar() {
-      try {
-        const res = await api("instalarSistema");
-        setMsg("loginMsg", res.message, res.ok);
-      } catch (e) {
-        setMsg("loginMsg", "Erro ao instalar: " + e.message, false);
-      }
+      const res = await api("instalarSistema");
+      setMsg("loginMsg", res.message, res.ok);
     }
 
     async function fazerLogin() {
-      try {
-        const usuario = document.getElementById("loginUsuario").value.trim();
-        const senha = document.getElementById("loginSenha").value.trim();
+      const usuario = document.getElementById("loginUsuario").value.trim();
+      const senha = document.getElementById("loginSenha").value.trim();
 
-        const res = await api("login", { usuario, senha });
+      const res = await api("login", { usuario, senha });
 
-        if (!res.ok) {
-          setMsg("loginMsg", res.message, false);
-          return;
-        }
-
-        usuarioLogado = res.user;
-        document.getElementById("loginView").classList.add("hidden");
-        document.getElementById("appView").classList.remove("hidden");
-        document.getElementById("userInfo").textContent =
-          res.user.nome + " | Perfil: " + res.user.perfil + " | Pode apagar: " + (res.user.podeApagar ? "SIM" : "NÃO");
-
-        document.getElementById("dashboardData").value = hojeISO();
-        document.getElementById("vendaData").value = hojeISO();
-        document.getElementById("relDataInicial").value = hojeISO();
-        document.getElementById("relDataFinal").value = hojeISO();
-
-        carregarDashboard();
-      } catch (e) {
-        setMsg("loginMsg", "Erro no login: " + e.message, false);
+      if (!res.ok) {
+        setMsg("loginMsg", res.message, false);
+        return;
       }
+
+      usuarioLogado = res.user;
+      document.getElementById("loginView").classList.add("hidden");
+      document.getElementById("appView").classList.remove("hidden");
+      document.getElementById("userInfo").textContent =
+        `${res.user.nome} | Perfil: ${res.user.perfil} | Pode apagar: ${res.user.podeApagar ? 'SIM' : 'NÃO'}`;
+
+      preencherDatasPadrao();
+      carregarDashboard();
     }
 
     function logout() {
@@ -505,169 +372,189 @@
     function openSection(id, btn) {
       document.querySelectorAll(".section").forEach(sec => sec.classList.remove("active"));
       document.getElementById(id).classList.add("active");
-
       document.querySelectorAll(".menu-btn").forEach(b => b.classList.remove("active"));
       btn.classList.add("active");
     }
 
     async function carregarDashboard() {
-      try {
-        const data = document.getElementById("dashboardData").value;
-        const res = await api("getDashboardData", { data });
+      const data = document.getElementById("dashboardData").value;
+      const res = await api("getDashboardData", { data });
 
-        if (!res.ok) {
-          alert(res.message);
-          return;
-        }
+      if (!res.ok) {
+        alert(res.message);
+        return;
+      }
 
-        document.getElementById("kpiTotal").textContent = money(res.resumo.total);
-        document.getElementById("kpiDinheiro").textContent = money(res.resumo.dinheiro);
-        document.getElementById("kpiPix").textContent = money(res.resumo.pix);
-        document.getElementById("kpiCartao").textContent = money(res.resumo.cartao);
-        document.getElementById("qtdVendas").textContent = res.resumo.quantidade + " vendas";
+      document.getElementById("statusCaixaBox").textContent =
+        res.aberto ? `Caixa ${data} está ABERTO.` : `Caixa ${data} está FECHADO ou ainda não foi aberto.`;
 
-        const rankingBody = document.getElementById("rankingBody");
-        rankingBody.innerHTML = "";
-        if (!res.ranking.length) {
-          rankingBody.innerHTML = '<tr><td colspan="2">Nenhuma venda na data selecionada.</td></tr>';
-        } else {
-          res.ranking.forEach(item => {
-            rankingBody.innerHTML += '<tr><td>' + item.vendedor + '</td><td>' + money(item.total) + '</td></tr>';
-          });
-        }
+      document.getElementById("kpiTotal").textContent = money(res.resumo.total);
+      document.getElementById("kpiDinheiro").textContent = money(res.resumo.dinheiro);
+      document.getElementById("kpiPix").textContent = money(res.resumo.pix);
+      document.getElementById("kpiCartao").textContent = money(res.resumo.cartao);
+      document.getElementById("kpiSangria").textContent = money(res.resumo.sangria);
+      document.getElementById("kpiSuprimento").textContent = money(res.resumo.suprimento);
+      document.getElementById("kpiSaldoInicial").textContent = money(res.resumo.saldoInicial);
+      document.getElementById("kpiSaldoTeorico").textContent = money(res.resumo.saldoDinheiroTeorico);
+      document.getElementById("qtdVendas").textContent = res.resumo.quantidadeVendas + " vendas";
 
-        const vendasDiaBody = document.getElementById("vendasDiaBody");
-        vendasDiaBody.innerHTML = "";
-        if (!res.vendas.length) {
-          vendasDiaBody.innerHTML = '<tr><td colspan="4">Nenhuma venda na data selecionada.</td></tr>';
-        } else {
-          res.vendas.forEach(v => {
-            vendasDiaBody.innerHTML += '<tr><td>' + v.hora + '</td><td>' + v.vendedor + '</td><td>' + v.formaPagamento + '</td><td>' + money(v.valor) + '</td></tr>';
-          });
-        }
-      } catch (e) {
-        alert("Erro ao carregar dashboard: " + e.message);
+      const rankingBody = document.getElementById("rankingBody");
+      rankingBody.innerHTML = "";
+      if (!res.ranking.length) {
+        rankingBody.innerHTML = '<tr><td colspan="2">Nenhuma venda.</td></tr>';
+      } else {
+        res.ranking.forEach(item => {
+          rankingBody.innerHTML += `<tr><td>${item.vendedor}</td><td>${money(item.total)}</td></tr>`;
+        });
+      }
+
+      const vendasDiaBody = document.getElementById("vendasDiaBody");
+      vendasDiaBody.innerHTML = "";
+      if (!res.vendas.length) {
+        vendasDiaBody.innerHTML = '<tr><td colspan="4">Nenhuma venda.</td></tr>';
+      } else {
+        res.vendas.forEach(v => {
+          vendasDiaBody.innerHTML += `<tr><td>${v.hora}</td><td>${v.vendedor}</td><td>${v.formaPagamento}</td><td>${money(v.valor)}</td></tr>`;
+        });
       }
     }
 
+    async function abrirCaixa() {
+      const payload = {
+        data: document.getElementById('caixaDataAbertura').value,
+        saldoInicial: document.getElementById('caixaSaldoInicial').value,
+        observacao: document.getElementById('caixaObsAbertura').value.trim()
+      };
+      const res = await api('abrirCaixa', { payload, usuarioLogado });
+      setMsg('caixaMsgAbertura', res.message, res.ok);
+      if (res.ok) carregarDashboard();
+    }
+
+    async function fecharCaixa() {
+      const payload = {
+        data: document.getElementById('caixaDataFechamento').value,
+        saldoFinalInformado: document.getElementById('caixaSaldoFinal').value,
+        observacao: document.getElementById('caixaObsFechamento').value.trim()
+      };
+      const res = await api('fecharCaixa', { payload, usuarioLogado });
+      setMsg('caixaMsgFechamento', res.message, res.ok);
+      if (res.ok) carregarDashboard();
+    }
+
     async function salvarVenda() {
-      try {
-        if (!usuarioLogado) {
-          alert("Faça login novamente.");
-          return;
-        }
+      const venda = {
+        data: document.getElementById('vendaData').value,
+        vendedor: document.getElementById('vendaVendedor').value.trim(),
+        formaPagamento: document.getElementById('vendaForma').value,
+        valor: document.getElementById('vendaValor').value,
+        observacao: document.getElementById('vendaObs').value.trim()
+      };
 
-        const venda = {
-          data: document.getElementById("vendaData").value,
-          vendedor: document.getElementById("vendaVendedor").value.trim(),
-          formaPagamento: document.getElementById("vendaForma").value,
-          valor: document.getElementById("vendaValor").value,
-          observacao: document.getElementById("vendaObs").value.trim()
-        };
+      const res = await api('registrarVenda', { venda, usuarioLogado });
+      setMsg('vendaMsg', res.message, res.ok);
 
-        const res = await api("registrarVenda", { venda, usuarioLogado });
-
-        if (!res.ok) {
-          setMsg("vendaMsg", res.message, false);
-          return;
-        }
-
-        setMsg("vendaMsg", res.message, true);
-        document.getElementById("vendaVendedor").value = "";
-        document.getElementById("vendaForma").value = "";
-        document.getElementById("vendaValor").value = "";
-        document.getElementById("vendaObs").value = "";
+      if (res.ok) {
+        document.getElementById('vendaVendedor').value = '';
+        document.getElementById('vendaForma').value = '';
+        document.getElementById('vendaValor').value = '';
+        document.getElementById('vendaObs').value = '';
         carregarDashboard();
-      } catch (e) {
-        setMsg("vendaMsg", "Erro ao salvar venda: " + e.message, false);
+      }
+    }
+
+    async function salvarMovimento() {
+      const movimento = {
+        data: document.getElementById('movData').value,
+        tipo: document.getElementById('movTipo').value,
+        valor: document.getElementById('movValor').value,
+        observacao: document.getElementById('movObs').value.trim()
+      };
+
+      const res = await api('registrarMovimento', { movimento, usuarioLogado });
+      setMsg('movMsg', res.message, res.ok);
+
+      if (res.ok) {
+        document.getElementById('movTipo').value = '';
+        document.getElementById('movValor').value = '';
+        document.getElementById('movObs').value = '';
+        carregarDashboard();
       }
     }
 
     async function buscarRelatorio() {
-      try {
-        const filtros = {
-          dataInicial: document.getElementById("relDataInicial").value,
-          dataFinal: document.getElementById("relDataFinal").value,
-          vendedor: document.getElementById("relVendedor").value.trim(),
-          formaPagamento: document.getElementById("relForma").value
-        };
+      const filtros = {
+        dataInicial: document.getElementById('relDataInicial').value,
+        dataFinal: document.getElementById('relDataFinal').value,
+        vendedor: document.getElementById('relVendedor').value.trim(),
+        formaPagamento: document.getElementById('relForma').value
+      };
 
-        const res = await api("listarRelatorio", { filtros });
-
-        if (!res.ok) {
-          alert(res.message);
-          return;
-        }
-
-        relatorioAtual = res.vendas;
-        const tbody = document.getElementById("relatorioBody");
-        tbody.innerHTML = "";
-
-        if (!res.vendas.length) {
-          tbody.innerHTML = '<tr><td colspan="7">Nenhum resultado encontrado.</td></tr>';
-          return;
-        }
-
-        res.vendas.forEach(v => {
-          const acao = usuarioLogado && usuarioLogado.podeApagar
-            ? '<button class="btn btn-danger" onclick="excluirVenda(\'' + v.id + '\')">Apagar</button>'
-            : '<span class="muted">Sem permissão</span>';
-
-          tbody.innerHTML += '<tr>' +
-            '<td>' + v.data + '</td>' +
-            '<td>' + v.hora + '</td>' +
-            '<td>' + v.vendedor + '</td>' +
-            '<td>' + v.formaPagamento + '</td>' +
-            '<td>' + money(v.valor) + '</td>' +
-            '<td>' + v.usuarioLancamento + '</td>' +
-            '<td>' + acao + '</td>' +
-            '</tr>';
-        });
-      } catch (e) {
-        alert("Erro ao buscar relatório: " + e.message);
+      const res = await api('listarRelatorio', { filtros });
+      if (!res.ok) {
+        alert(res.message);
+        return;
       }
+
+      relatorioAtual = res.vendas;
+      const tbody = document.getElementById('relatorioBody');
+      tbody.innerHTML = '';
+
+      if (!res.vendas.length) {
+        tbody.innerHTML = '<tr><td colspan="7">Nenhum resultado encontrado.</td></tr>';
+        return;
+      }
+
+      res.vendas.forEach(v => {
+        const acao = usuarioLogado && usuarioLogado.podeApagar
+          ? `<button class="btn btn-danger" onclick="excluirVenda('${v.id}')">Apagar</button>`
+          : '<span class="muted">Sem permissão</span>';
+
+        tbody.innerHTML += `<tr>
+          <td>${v.data}</td>
+          <td>${v.hora}</td>
+          <td>${v.vendedor}</td>
+          <td>${v.formaPagamento}</td>
+          <td>${money(v.valor)}</td>
+          <td>${v.usuarioLancamento}</td>
+          <td>${acao}</td>
+        </tr>`;
+      });
     }
 
     async function excluirVenda(id) {
-      if (!confirm("Deseja realmente apagar esta venda?")) return;
-
-      try {
-        const res = await api("apagarVenda", { idVenda: id, usuarioLogado });
-        alert(res.message);
-        if (res.ok) {
-          buscarRelatorio();
-          carregarDashboard();
-        }
-      } catch (e) {
-        alert("Erro ao apagar venda: " + e.message);
+      if (!confirm('Deseja realmente apagar esta venda?')) return;
+      const res = await api('apagarVenda', { idVenda: id, usuarioLogado });
+      alert(res.message);
+      if (res.ok) {
+        buscarRelatorio();
+        carregarDashboard();
       }
     }
 
     function exportarTXT() {
       if (!relatorioAtual.length) {
-        alert("Nenhum relatório carregado para exportar.");
+        alert('Nenhum relatório carregado.');
         return;
       }
 
-      let texto = "RELATÓRIO DE VENDAS\n";
-      texto += "====================================\n\n";
+      let texto = 'RELATÓRIO DE VENDAS\\n====================================\\n\\n';
 
       relatorioAtual.forEach(v => {
-        texto += "Data: " + v.data + "\n";
-        texto += "Hora: " + v.hora + "\n";
-        texto += "Vendedor: " + v.vendedor + "\n";
-        texto += "Forma: " + v.formaPagamento + "\n";
-        texto += "Valor: " + money(v.valor) + "\n";
-        texto += "Usuário: " + v.usuarioLancamento + "\n";
-        texto += "Observação: " + (v.observacao || "-") + "\n";
-        texto += "------------------------------------\n";
+        texto += `Data: ${v.data}\\n`;
+        texto += `Hora: ${v.hora}\\n`;
+        texto += `Vendedor: ${v.vendedor}\\n`;
+        texto += `Forma: ${v.formaPagamento}\\n`;
+        texto += `Valor: ${money(v.valor)}\\n`;
+        texto += `Usuário: ${v.usuarioLancamento}\\n`;
+        texto += `Observação: ${v.observacao || '-'}\\n`;
+        texto += '------------------------------------\\n';
       });
 
-      const blob = new Blob([texto], { type: "text/plain;charset=utf-8" });
+      const blob = new Blob([texto], { type: 'text/plain;charset=utf-8' });
       const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
+      const a = document.createElement('a');
       a.href = url;
-      a.download = "relatorio_vendas.txt";
+      a.download = 'relatorio_vendas.txt';
       a.click();
       URL.revokeObjectURL(url);
     }
